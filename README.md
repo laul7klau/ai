@@ -13,9 +13,9 @@ This project builds AWS resources required to demo LLM RAG on AWS Bedrock
 
 ## Steps:
 There are 5 Cloudformation yaml files in this repository to deploy:
-- [Deploy AWS bedrock](### Deploy AWS bedrock)
-- [Deploy BIG-IP](### Deploy BIG-IP)
-- [Deploy stack](### Destroy stack)
+- [Deploy AWS bedrock](###Deploy-AWS-bedrock)
+- [Deploy BIG-IP](### Deploy-BIGIP)
+- [Deploy stack](### Destroy-stack)
 
 ### Deploy AWS bedrock
 This section deploys 4 files to create the following AWS bedrock resources: 
@@ -39,7 +39,7 @@ aws cloudformation create-stack --region us-west-2 --stack-name clientstack --pr
 aws cloudformation create-stack --region us-west-2 --stack-name apigwStack --profile Users-358712379163 --template-body file://./4apigw.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=LayerBucketName,ParameterValue=clientstack-bedrock-layer-bucket ParameterKey=BedrockAgentId,ParameterValue=VWJUQ5M47T ParameterKey=BedrockAgentAlias,ParameterValue=J6PQDVVG0B
 ```
 
-### Deploy BIG-IP
+### Deploy BIGIP
 This section creates a VPC, BIG-IP EC2 instanace and other required resources.
 1. Run this to deploy the entire VPC stack
 ```

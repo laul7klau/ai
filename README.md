@@ -1,7 +1,7 @@
 # ai
 This project builds AWS resources required to demo LLM RAG on AWS Bedrock
 
-##Prerequisites:
+## Prerequisites:
 - Install aws cli on your client notebook.
 - If your organization implements individual SSO accounts:
   - Login to your profile on the CLI:
@@ -11,7 +11,7 @@ This project builds AWS resources required to demo LLM RAG on AWS Bedrock
   - To verify you're logged in, run:
     aws sts get-caller-identity --profile Users-358712379163
 
-##Steps:
+## Steps:
 There are 5 Cloudformation yaml files in this repository to deploy:
 - AWS bedrock infra files to deploy bedrock vector db, knowledge base, agent AI, API gateway.
   - Deploy files 1vectordb to 4apigw sequentially.

@@ -15,7 +15,7 @@ This project builds AWS resources required to demo LLM RAG on AWS Bedrock
 There are 5 Cloudformation yaml files in this repository to deploy:
 - [Deploy AWS bedrock](#Deploy-AWS-bedrock)
 - [Deploy BIG-IP](#Deploy-BIGIP)
-- [Deploy stack](#Destroy-stack)
+- [Destroy stack](#Destroy-stack)
 
 ### Deploy AWS bedrock
 This section deploys 4 files to create the following AWS bedrock resources: 

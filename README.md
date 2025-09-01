@@ -22,13 +22,13 @@ There are 5 Cloudformation yaml files in this repository to deploy:
 ### Deploy AWS bedrock
 This section deploys 4 files to create the following AWS bedrock resources: 
 1. Set up environment variables:  
-USERNUM=358712379163  
-IAMUSERARN=arn:aws:iam::$USERNUM:user/User07  
+USERNUM=??  
+IAMUSERARN=arn:aws:iam::$USERNUM:user/??  
   
-USERPROFILE=Users-$USERNUM    
-DATASOURCE=inagent-kb-$USERNUM  
-S3BUCKETARN=arn:aws:s3:::inagent-kb-$USERNUM
-
+   USERPROFILE=Users-$USERNUM  
+   DATASOURCE=inagent-kb-$USERNUM  
+   S3BUCKETARN=arn:aws:s3:::inagent-kb-$USERNUM  
+  
 2. Run this to dbstack: 3 IAM Roles, AttachedPolicyLambdab OpenSearchServerless collection, DataAccesPolicy, Encryption policy, Create/Delete S3bucket, Lambda function:
 ```
 aws cloudformation create-stack --region us-west-2 --stack-name dbStack --profile $USERPROFILE --template-body file://./1vectordb.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=IAMUserArn,ParameterValue=$IAMUSERARN
@@ -36,7 +36,7 @@ aws cloudformation create-stack --region us-west-2 --stack-name dbStack --profil
 
 2. Run this to create kbstack: the knowledge base, AI agent stack:
 ```
-COLLECTIONARN=arn:aws:aoss:us-west-2:358712379163:collection/xwb9tdewcftsui29pmh4  
+COLLECTIONARN=??  
 AMAZONBEDROCKEXCEUTIONROLEFORKNOWLEDGEBASE=arn:aws:iam::$USERNUM\:role/AmazonBedrockExecutionRoleForKnowledgeBase-inagent-kb
   
 aws cloudformation create-stack --region us-west-2 --stack-name kbagentStack --profile $USERPROFILE --template-body file://./2kbagent.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --parameters ParameterKey=AmazonBedrockExecutionRoleForKnowledgeBasearn,ParameterValue=$AMAZONBEDROCKEXCEUTIONROLEFORKNOWLEDGEBASE ParameterKey=CollectionArn,ParameterValue=$COLLECTIONARN ParameterKey=S3bucketarn,ParameterValue=$S3BUCKETARN ParameterKey=DataSource,ParameterValue=$DATASOURCE
@@ -44,8 +44,8 @@ aws cloudformation create-stack --region us-west-2 --stack-name kbagentStack --p
 
 3. Run this to the apigw stack:
 ```
-BEDROCKAGENTID=TIKMH9I8RW  
-BEDROCKAGENTALIAS=ZEXCPHWG5Y  
+BEDROCKAGENTID=??  
+BEDROCKAGENTALIAS=??  
   
 aws cloudformation create-stack --region us-west-2 --stack-name apigwStack --profile $USERPROFILE --template-body file://./3apigw.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=BedrockAgentId,ParameterValue=$BEDROCKAGENTID ParameterKey=BedrockAgentAlias,ParameterValue=$BEDROCKAGENTALIAS  
 ```
@@ -53,7 +53,7 @@ aws cloudformation create-stack --region us-west-2 --stack-name apigwStack --pro
 ### Deploy BIGIP
 This section creates a VPC, BIG-IP EC2 instanace and other required resources.
 Set USERPROFILE if you haven't:  
-USERNUM=358712379163  
+USERNUM=??  
 USERPROFILE=Users-$USERNUM  
   
 1. Run this to deploy the entire VPC stack

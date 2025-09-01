@@ -5,8 +5,10 @@ This project builds AWS resources required to demo LLM RAG on AWS Bedrock
 - Install aws cli on your client notebook.
 - If your organization implements individual SSO accounts:
   - Login to your profile on the CLI:  
+    USERNUM=358712379163  
+    USERPROFILE=Users-$USERNUM  
     aws sso login --profile <PROFILE_NAME>  
-    aws sso login --profile Users-358712379163
+    aws sso login --profile $USERPROFILE
 
   - To verify you're logged in, run:  
     aws sts get-caller-identity --profile Users-358712379163
@@ -19,31 +21,44 @@ There are 5 Cloudformation yaml files in this repository to deploy:
 
 ### Deploy AWS bedrock
 This section deploys 4 files to create the following AWS bedrock resources: 
-1. Run this to create 3 IAM Roles, AttachedPolicyLambdab OpenSearchServerless collection, DataAccesPolicy, Encryption policy, Create/Delete S3bucket, Lambda function:
+1. Set up environment variables:  
+USERNUM=358712379163  
+IAMUSERARN=arn:aws:iam::$USERNUM:user/User07  
+  
+USERPROFILE=Users-$USERNUM    
+DATASOURCE=inagent-kb-$USERNUM  
+S3BUCKETARN=arn:aws:s3:::inagent-kb-$USERNUM
+
+2. Run this to dbstack: 3 IAM Roles, AttachedPolicyLambdab OpenSearchServerless collection, DataAccesPolicy, Encryption policy, Create/Delete S3bucket, Lambda function:
 ```
-aws cloudformation create-stack --region us-west-2 --stack-name dbStack --profile Users-358712379163 --template-body file://./1vectordb.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=IAMUserArn,ParameterValue=arn:aws:iam::358712379163:user/User07
+aws cloudformation create-stack --region us-west-2 --stack-name dbStack --profile $USERPROFILE --template-body file://./1vectordb.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=IAMUserArn,ParameterValue=$IAMUSERARN
 ```
 
-2. Run this to create the knowledge base, AI agent stack:
+2. Run this to create kbstack: the knowledge base, AI agent stack:
 ```
-aws cloudformation create-stack --region us-west-2 --stack-name kbagentStack --profile Users-358712379163 --template-body file://./2kbagent.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=AmazonBedrockExecutionRoleForKnowledgeBasearn,ParameterValue=arn:aws:iam::358712379163:role/AmazonBedrockExecutionRoleForKnowledgeBase-inagent-kb ParameterKey=CollectionArn,ParameterValue=arn:aws:aoss:us-west-2:358712379163:collection/lpecu56aqhhl8iw0i2m6 ParameterKey=S3bucketarn,ParameterValue=arn:aws:s3:::inagent-kb-358712379163 ParameterKey=DataSource,ParameterValue=inagent-kb-358712379163
-```
-
-3. Run this to the client stack:
-```
-aws cloudformation create-stack --region us-west-2 --stack-name clientstack --profile Users-358712379163 --template-body file://./3client.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM
+COLLECTIONARN=arn:aws:aoss:us-west-2:358712379163:collection/xwb9tdewcftsui29pmh4  
+AMAZONBEDROCKEXCEUTIONROLEFORKNOWLEDGEBASE=arn:aws:iam::$USERNUM\:role/AmazonBedrockExecutionRoleForKnowledgeBase-inagent-kb
+  
+aws cloudformation create-stack --region us-west-2 --stack-name kbagentStack --profile $USERPROFILE --template-body file://./2kbagent.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --parameters ParameterKey=AmazonBedrockExecutionRoleForKnowledgeBasearn,ParameterValue=$AMAZONBEDROCKEXCEUTIONROLEFORKNOWLEDGEBASE ParameterKey=CollectionArn,ParameterValue=$COLLECTIONARN ParameterKey=S3bucketarn,ParameterValue=$S3BUCKETARN ParameterKey=DataSource,ParameterValue=$DATASOURCE
 ```
 
-4. Run this to create
+3. Run this to the apigw stack:
 ```
-aws cloudformation create-stack --region us-west-2 --stack-name apigwStack --profile Users-358712379163 --template-body file://./4apigw.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=LayerBucketName,ParameterValue=clientstack-bedrock-layer-bucket ParameterKey=BedrockAgentId,ParameterValue=VWJUQ5M47T ParameterKey=BedrockAgentAlias,ParameterValue=J6PQDVVG0B
+BEDROCKAGENTID=TIKMH9I8RW  
+BEDROCKAGENTALIAS=ZEXCPHWG5Y  
+  
+aws cloudformation create-stack --region us-west-2 --stack-name apigwStack --profile $USERPROFILE --template-body file://./3apigw.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=BedrockAgentId,ParameterValue=$BEDROCKAGENTID ParameterKey=BedrockAgentAlias,ParameterValue=$BEDROCKAGENTALIAS  
 ```
 
 ### Deploy BIGIP
 This section creates a VPC, BIG-IP EC2 instanace and other required resources.
+Set USERPROFILE if you haven't:  
+USERNUM=358712379163  
+USERPROFILE=Users-$USERNUM  
+  
 1. Run this to deploy the entire VPC stack
 ```
-aws cloudformation create-stack --region us-west-2 --stack-name bigipStack --profile Users-358712379163 --template-body file://./quickstart.yaml --parameters ParameterKey=restrictedSrcAddressMgmt,ParameterValue=0.0.0.0/0 ParameterKey=restrictedSrcAddressApp,ParameterValue=0.0.0.0/0
+aws cloudformation create-stack --region us-west-2 --stack-name bigipStack --profile $USERPROFILE --template-body file://./4bigip.yaml --parameters ParameterKey=restrictedSrcAddressMgmt,ParameterValue=0.0.0.0/0 ParameterKey=restrictedSrcAddressApp,ParameterValue=0.0.0.0/0
 ```
 
 2. Run this to retrieve the private key of the BIG-IP and save it to your local drive

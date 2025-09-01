@@ -5,13 +5,14 @@ This project builds AWS resources required to demo LLM RAG on AWS Bedrock
 - Install aws cli on your client notebook.
 - If your organization implements individual SSO accounts:
   - Login to your profile on the CLI:  
-    USERNUM=358712379163  
+    USERNUM=??  
     USERPROFILE=Users-$USERNUM  
     aws sso login --profile <PROFILE_NAME>  
     aws sso login --profile $USERPROFILE  
   
   - To verify you're logged in, run:  
-    aws sts get-caller-identity --profile Users-358712379163  
+    aws sts get-caller-identity --profile $USERPROFILE
+    
   
 ## Steps:
 There are 5 Cloudformation yaml files in this repository to deploy:

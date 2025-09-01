@@ -8,11 +8,11 @@ This project builds AWS resources required to demo LLM RAG on AWS Bedrock
     USERNUM=358712379163  
     USERPROFILE=Users-$USERNUM  
     aws sso login --profile <PROFILE_NAME>  
-    aws sso login --profile $USERPROFILE
-
+    aws sso login --profile $USERPROFILE  
+  
   - To verify you're logged in, run:  
-    aws sts get-caller-identity --profile Users-358712379163
-
+    aws sts get-caller-identity --profile Users-358712379163  
+  
 ## Steps:
 There are 5 Cloudformation yaml files in this repository to deploy:
 - [Deploy AWS bedrock](#Deploy-AWS-bedrock)
@@ -63,7 +63,7 @@ aws cloudformation create-stack --region us-west-2 --stack-name bigipStack --pro
 
 2. Run this to retrieve the private key of the BIG-IP and save it to your local drive
 ```
-aws ssm get-parameter --name "/ec2/keypair/key-0af28da890e61a1a5" --with-decryption --query Parameter.Value --output text --region us-west-2 --profile Users-358712379163 > mykey.pem
+aws ssm get-parameter --name "/ec2/keypair/key-???" --with-decryption --query Parameter.Value --output text --region us-west-2 --profile $USERPROFILE > mykey.pem
 ```
 
 ### Destroy stack

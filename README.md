@@ -24,7 +24,7 @@ There are 5 Cloudformation yaml files in this repository to deploy:
 This section deploys 4 files to create the following AWS bedrock resources: 
 1. Set up environment variables:  
 USERNUM=??  
-IAMUSERARN=arn:aws:iam::$USERNUM:user/??  
+IAMUSERARN=arn:aws:iam::$USERNUM\:user/??  
   
    USERPROFILE=Users-$USERNUM  
    DATASOURCE=inagent-kb-$USERNUM  
